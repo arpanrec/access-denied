@@ -1,0 +1,42 @@
+---
+spring:
+    main:
+        lazy-initialization: true
+    datasource:
+        url: jdbc:postgresql://localhost:5432/access-denied-db
+        username: access-denied-db-user
+        password: access-denied-db-password
+        driver-class-name: org.postgresql.Driver
+        hikari:
+            auto-commit: true
+            connection-timeout: 10000
+            idle-timeout: 30000
+            max-lifetime: 1800000
+            maximum-pool-size: 10
+            minimum-idle: 5
+            schema: accessdenied_s
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        generate-ddl: false
+        open-in-view: true
+        hibernate:
+            ddl-auto: validate
+        show-sql: false
+        properties:
+            hibernate:
+                hbm2ddl:
+                    auto: validate
+                default_schema: accessdenied_s
+    flyway:
+        enabled: true
+        default-schema: accessdenied_s
+        table: flyway_schema_history
+        locations: classpath:db/migration
+        create-schemas: true
+        schemas:
+            - accessdenied_s
+accessdenied:
+    unlock-keys:
+        - C:\Users\arpan\workspace\src\access-denied\access-denied-backend\foo.json
+    root-passwords:
+        accessdenied: password

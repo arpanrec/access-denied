@@ -1,0 +1,11 @@
+*
+!/settings.gradle.kts
+!/build.gradle.kts
+!/gradle.properties
+!/gradlew
+!/gradlew.bat
+!/gradle
+!/access-denied-backend/src
+!/access-denied-backend/build.gradle.kts
+!/access-denied-backend/settings.gradle.kts
+!/access-denied-backend/build/libs/access-denied-backend-boot-*

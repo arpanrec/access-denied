@@ -1,0 +1,48 @@
+---
+name: Gradle Test
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+jobs:
+    test:
+        name: Test
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6.0.1
+
+            - name: Cache Gradle packages
+              uses: actions/cache@v4.3.0
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-
+
+            - name: Setup Java
+              uses: actions/setup-java@v5.1.0
+              with:
+                  distribution: "temurin"
+                  java-version: 21
+
+            - name: Build with Gradle
+              run: |+
+                  chmod +x gradlew
+                  ./gradlew test
+
+            - name: Archive Gradle Test Report
+              uses: actions/upload-artifact@v5.0.0
+              if: always()
+              with:
+                  name: gradle-reports
+                  path: |
+                      **/build/reports/
+                      **/build/test-results/
+                  retention-days: 1
+                  if-no-files-found: error
+                  overwrite: false
+                  include-hidden-files: true
