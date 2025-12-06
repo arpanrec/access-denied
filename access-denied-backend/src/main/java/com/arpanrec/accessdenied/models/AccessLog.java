@@ -17,11 +17,8 @@ as the name is changed.
 */
 package com.arpanrec.accessdenied.models;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.servlet.http.Cookie;
@@ -42,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Setter
 public class AccessLog {
-
     public AccessLog(@NotNull HttpServletRequest request) {
         originIp = request.getRemoteAddr();
         time = System.currentTimeMillis();
@@ -78,11 +74,11 @@ public class AccessLog {
     private long time;
 
     @Column(name = "headers_c", columnDefinition = "TEXT")
-    @Convert(converter = MapAttributeConverter.class)
+    @Convert(converter = AccessLogMapAttributeConverter.class)
     private Map<String, String> headers = new HashMap<>();
 
     @Column(name = "cookies_c", columnDefinition = "TEXT")
-    @Convert(converter = MapAttributeConverter.class)
+    @Convert(converter = AccessLogMapAttributeConverter.class)
     private Map<String, String> cookies = new HashMap<>();
 
     @Column(name = "method_c")
@@ -92,54 +88,6 @@ public class AccessLog {
     private String uri;
 
     @Column(name = "params_c")
-    @Convert(converter = QueryStringAttributeConverter.class)
+    @Convert(converter = AccessLogQueryStringAttributeConverter.class)
     private Map<String, String[]> queryString = new HashMap<>();
-
-    @Converter
-    public static class MapAttributeConverter implements AttributeConverter<Map<String, String>, String> {
-        private final ObjectMapper mapper = new ObjectMapper();
-
-        @Override
-        public String convertToDatabaseColumn(Map<String, String> attribute) {
-            try {
-                return mapper.writeValueAsString(attribute);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to convert map to JSON string", e);
-            }
-        }
-
-        @Override
-        public Map<String, String> convertToEntityAttribute(String dbData) {
-            try {
-                return mapper.readValue(
-                        dbData, mapper.getTypeFactory().constructMapType(Map.class, String.class, String.class));
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to convert JSON string to list of roles", e);
-            }
-        }
-    }
-
-    @Converter
-    public static class QueryStringAttributeConverter implements AttributeConverter<Map<String, String[]>, String> {
-        private final ObjectMapper mapper = new ObjectMapper();
-
-        @Override
-        public String convertToDatabaseColumn(Map<String, String[]> attribute) {
-            try {
-                return mapper.writeValueAsString(attribute);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to convert map to JSON string", e);
-            }
-        }
-
-        @Override
-        public Map<String, String[]> convertToEntityAttribute(String dbData) {
-            try {
-                return mapper.readValue(
-                        dbData, mapper.getTypeFactory().constructMapType(HashMap.class, String.class, String[].class));
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to convert JSON string to list of roles", e);
-            }
-        }
-    }
 }

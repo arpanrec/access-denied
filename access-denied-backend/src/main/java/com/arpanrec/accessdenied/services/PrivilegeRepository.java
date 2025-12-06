@@ -21,12 +21,13 @@ import com.arpanrec.accessdenied.models.Namespace;
 import com.arpanrec.accessdenied.models.Privilege;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PrivilegeRepository extends JpaRepository<Privilege, String> {
+public interface PrivilegeRepository extends JpaRepository<@NotNull Privilege, @NotNull String> {
 
     Optional<Privilege> findByNameAndNamespace(String name, Namespace namespace);
 

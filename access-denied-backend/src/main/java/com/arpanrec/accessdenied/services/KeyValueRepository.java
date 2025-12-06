@@ -21,13 +21,14 @@ import com.arpanrec.accessdenied.models.Bucket;
 import com.arpanrec.accessdenied.models.KeyValue;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface KeyValueRepository extends JpaRepository<KeyValue, String> {
+public interface KeyValueRepository extends JpaRepository<@NotNull KeyValue, @NotNull String> {
 
     @Query("select max(kv.version) from key_value_t kv where kv.key = ?1 and kv.deleted = false and kv.bucket = ?2")
     Optional<Integer> findTopCurrentVersion(String key, Bucket bucket);

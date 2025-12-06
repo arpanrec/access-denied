@@ -20,10 +20,11 @@ package com.arpanrec.accessdenied.services;
 import com.arpanrec.accessdenied.models.ApplicationProperty;
 import com.arpanrec.accessdenied.models.Namespace;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApplicationPropertiesRepository extends CrudRepository<ApplicationProperty, String> {
+public interface ApplicationPropertiesRepository extends CrudRepository<@NotNull ApplicationProperty, @NotNull String> {
     Optional<ApplicationProperty> findTopByKeyAndNamespaceOrderByVersionDesc(String key, Namespace namespace);
 }

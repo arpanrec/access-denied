@@ -20,11 +20,12 @@ package com.arpanrec.accessdenied.services;
 import com.arpanrec.accessdenied.models.Bucket;
 import com.arpanrec.accessdenied.models.Namespace;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BucketsRepository extends CrudRepository<Bucket, String> {
+public interface BucketsRepository extends CrudRepository<@NotNull Bucket, @NotNull String> {
     Optional<Bucket> findByNameAndNamespace(String name, Namespace namespace);
 
     Iterable<Bucket> findAllByNamespace(Namespace namespace);

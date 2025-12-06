@@ -18,8 +18,9 @@ as the name is changed.
 package com.arpanrec.accessdenied.services;
 
 import com.arpanrec.accessdenied.models.AccessLog;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccessLogRepository extends CrudRepository<AccessLog, String> {}
+public interface AccessLogRepository extends CrudRepository<@NotNull AccessLog, @NotNull String> {}

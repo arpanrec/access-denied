@@ -79,10 +79,10 @@ object Argon2 : PasswordEncoder {
     }
 
     override fun matches(
-        rawPassword: CharSequence,
-        encodedPassword: String,
+        rawPassword: CharSequence?,
+        encodedPassword: String?,
     ): Boolean {
-        if (encodedPassword.isEmpty() || rawPassword.isEmpty()) {
+        if (rawPassword == null || encodedPassword == null || encodedPassword.isEmpty() || rawPassword.isEmpty()) {
             return false
         }
         val encodedPasswordParts = encodedPassword.split(":")
@@ -91,7 +91,7 @@ object Argon2 : PasswordEncoder {
         }
         val salt = encodedPasswordParts[0].hexToByteArray()
         val hashedPassword = encodedPasswordParts[1].hexToByteArray()
-        for (c: Char in CHARACTERS) {
+        for (c in CHARACTERS) {
             val tryHashPassword = hashString(rawPassword.toString().toByteArray(), salt, c.toString().toByteArray())
             if (tryHashPassword.contentEquals(hashedPassword)) {
                 return true

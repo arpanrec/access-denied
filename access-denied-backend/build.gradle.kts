@@ -9,18 +9,18 @@ logging.captureStandardOutput(LogLevel.INFO)
 plugins {
     java
     application
-    id("org.springframework.boot") version "3.5.8"
+    id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.jetbrains.kotlin.jvm") version "2.2.21"
-    id("org.jetbrains.kotlin.plugin.spring") version "2.2.21"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0-RC2"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.3.0-RC2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0-RC2"
     idea
     id("org.graalvm.buildtools.native") version "0.11.3"
-    id("org.jetbrains.kotlin.plugin.jpa") version "2.2.21"
-    id("org.hibernate.orm") version "7.1.4.Final"
+    id("org.jetbrains.kotlin.plugin.jpa") version "2.3.0-RC2"
+    id("org.hibernate.orm") version "7.2.0.CR3"
     id("org.flywaydb.flyway") version "11.18.0"
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
-    id("maven-publish")
+    `maven-publish`
 }
 
 group = "com.arpanrec"
@@ -60,22 +60,22 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:1.83")
     implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
 
-    implementation("org.pgpainless:pgpainless-core:1.6.7")
-
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
-    implementation("org.postgresql:postgresql:42.7.8")
-    implementation("org.xerial:sqlite-jdbc:3.51.0.0")
-    implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
+    implementation("org.xerial:sqlite-jdbc:3.51.1.0")
+//    implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
     implementation("org.hibernate.orm:hibernate-community-dialects")
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-database-postgresql")
 
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
-
+    testImplementation("org.springframework.boot:spring-boot-starter-flyway-test") {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+    }
+    implementation("org.springframework.boot:spring-boot-starter-flyway") {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+    }
     implementation("org.springframework.boot:spring-boot-starter-security") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
@@ -115,8 +115,8 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 //    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
-//    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
+//    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 //    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.0")
 
     testImplementation("org.springframework.security:spring-security-test") {
@@ -126,9 +126,9 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -137,8 +137,9 @@ graalvmNative {
         all {
             javaLauncher.set(
                 javaToolchains.launcherFor {
-                    languageVersion.set(JavaLanguageVersion.of(21))
+                    languageVersion.set(JavaLanguageVersion.of(25))
                     vendor.set(JvmVendorSpec.GRAAL_VM)
+                    buildArgs.add("--enable-native-access=ALL-UNNAMED")
                 },
             )
         }
@@ -151,9 +152,9 @@ tasks.withType<JavaCompile> {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 sourceSets {
@@ -207,7 +208,7 @@ tasks {
     withType<KotlinCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xjsr305=strict")
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(JvmTarget.JVM_25)
         }
     }
     withType<Test> {
@@ -215,6 +216,8 @@ tasks {
         testLogging {
             events("passed", "skipped", "failed")
         }
+        jvmArgs = listOf("--enable-native-access=ALL-UNNAMED")
+
         systemProperty("spring.profiles.active", "test")
         reports {
             html.required = true
@@ -224,7 +227,9 @@ tasks {
 }
 
 tasks.named<BootRun>("bootRun") {
+    jvmArgs = listOf("--enable-native-access=ALL-UNNAMED")
     systemProperties["spring.profiles.active"] = "default,production"
+    systemProperties.putAll(System.getProperties().map { it.key.toString() to it.value }.toMap())
 }
 
 allOpen {
@@ -234,10 +239,6 @@ allOpen {
 }
 
 fun getMainClassName(): String = "com.arpanrec.accessdenied.Application"
-
-tasks.named<BootRun>("bootRun") {
-    systemProperties.putAll(System.getProperties().map { it.key.toString() to it.value }.toMap())
-}
 
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
