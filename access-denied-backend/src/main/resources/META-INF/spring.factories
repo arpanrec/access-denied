@@ -1,1 +1,1 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.arpanrec.accessdenied.DekInitializer
+org.springframework.boot.EnvironmentPostProcessor=com.arpanrec.accessdenied.DekInitializer

@@ -26,7 +26,7 @@ jobs:
               uses: actions/setup-java@v5.1.0
               with:
                   distribution: "temurin"
-                  java-version: 21
+                  java-version: 25
 
             - name: Set env
               run: echo "ACCESSDENIED_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV

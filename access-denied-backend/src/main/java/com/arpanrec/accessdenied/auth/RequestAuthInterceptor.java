@@ -29,8 +29,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,9 +55,7 @@ public class RequestAuthInterceptor extends OncePerRequestFilter {
     }
 
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain)
+            @NotNull HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         AccessLog accessLog = new AccessLog(request);
         accessLogRepository.save(accessLog);
@@ -68,7 +66,7 @@ public class RequestAuthInterceptor extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setCredentials(@NonNull HttpServletRequest request, AuthenticationImpl authentication) {
+    private void setCredentials(@NotNull HttpServletRequest request, AuthenticationImpl authentication) {
         String namespaceFromHeader = request.getHeader(AccessDeniedConstants.NAMESPACE_HEADER);
         authentication.setNamespace(
                 nameSpaceService.getOptional(namespaceFromHeader).orElse(null));
