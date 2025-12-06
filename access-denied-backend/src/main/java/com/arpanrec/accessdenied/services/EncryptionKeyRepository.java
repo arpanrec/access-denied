@@ -20,11 +20,12 @@ package com.arpanrec.accessdenied.services;
 import com.arpanrec.accessdenied.models.EncryptionKey;
 import com.arpanrec.accessdenied.models.Namespace;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EncryptionKeyRepository extends JpaRepository<EncryptionKey, String> {
+public interface EncryptionKeyRepository extends JpaRepository<@NotNull EncryptionKey, @NotNull String> {
     Optional<EncryptionKey> findTopByNamespaceIdOrderByIdDesc(String namespaceId);
 
     Optional<EncryptionKey> findByIdAndEncryptorHashAndKeyHashAndNamespace(

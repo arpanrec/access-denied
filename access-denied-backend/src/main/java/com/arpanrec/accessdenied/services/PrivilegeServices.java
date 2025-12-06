@@ -22,6 +22,7 @@ import com.arpanrec.accessdenied.exceptions.PrivilegeFoundException;
 import com.arpanrec.accessdenied.models.Namespace;
 import com.arpanrec.accessdenied.models.Privilege;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,7 +30,7 @@ public class PrivilegeServices {
 
     private final PrivilegeRepository privilegeRepository;
 
-    public PrivilegeServices(PrivilegeRepository privilegeRepository) {
+    public PrivilegeServices(@Autowired PrivilegeRepository privilegeRepository) {
         this.privilegeRepository = privilegeRepository;
     }
 

@@ -25,7 +25,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NamespaceRepository extends CrudRepository<Namespace, String> {
+public interface NamespaceRepository extends CrudRepository<@NotNull Namespace, @NotNull String> {
     Optional<Namespace> findByName(String name);
 
     @NotNull

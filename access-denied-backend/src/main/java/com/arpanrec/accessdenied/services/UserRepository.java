@@ -20,10 +20,11 @@ package com.arpanrec.accessdenied.services;
 import com.arpanrec.accessdenied.models.Namespace;
 import com.arpanrec.accessdenied.models.User;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, String> {
+public interface UserRepository extends CrudRepository<@NotNull User, @NotNull String> {
     Optional<User> findByUsernameAndNamespace(String username, Namespace namespace);
 }
