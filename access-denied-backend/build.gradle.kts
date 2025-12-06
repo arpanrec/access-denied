@@ -66,7 +66,7 @@ dependencies {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
     implementation("org.postgresql:postgresql:42.7.8")
-    implementation("org.xerial:sqlite-jdbc:3.51.0.0")
+    implementation("org.xerial:sqlite-jdbc:3.51.1.0")
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
     implementation("org.hibernate.orm:hibernate-community-dialects")
     implementation("org.flywaydb:flyway-core")
