@@ -115,7 +115,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 //    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 //    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 //    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.0")
 
