@@ -60,7 +60,7 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:1.83")
     implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
 
-    implementation("org.pgpainless:pgpainless-core:1.6.7")
+    implementation("org.pgpainless:pgpainless-core:2.0.2")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
