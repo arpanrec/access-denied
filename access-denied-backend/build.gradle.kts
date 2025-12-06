@@ -17,7 +17,7 @@ plugins {
     idea
     id("org.graalvm.buildtools.native") version "0.11.3"
     id("org.jetbrains.kotlin.plugin.jpa") version "2.2.21"
-    id("org.hibernate.orm") version "7.1.4.Final"
+    id("org.hibernate.orm") version "7.1.11.Final"
     id("org.flywaydb.flyway") version "11.18.0"
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
     id("maven-publish")
