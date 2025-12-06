@@ -139,6 +139,7 @@ graalvmNative {
                 javaToolchains.launcherFor {
                     languageVersion.set(JavaLanguageVersion.of(25))
                     vendor.set(JvmVendorSpec.GRAAL_VM)
+                    buildArgs.add("--enable-native-access=ALL-UNNAMED")
                 },
             )
         }
@@ -215,6 +216,8 @@ tasks {
         testLogging {
             events("passed", "skipped", "failed")
         }
+        jvmArgs = listOf("--enable-native-access=ALL-UNNAMED")
+
         systemProperty("spring.profiles.active", "test")
         reports {
             html.required = true
@@ -224,7 +227,9 @@ tasks {
 }
 
 tasks.named<BootRun>("bootRun") {
+    jvmArgs = listOf("--enable-native-access=ALL-UNNAMED")
     systemProperties["spring.profiles.active"] = "default,production"
+    systemProperties.putAll(System.getProperties().map { it.key.toString() to it.value }.toMap())
 }
 
 allOpen {
@@ -234,10 +239,6 @@ allOpen {
 }
 
 fun getMainClassName(): String = "com.arpanrec.accessdenied.Application"
-
-tasks.named<BootRun>("bootRun") {
-    systemProperties.putAll(System.getProperties().map { it.key.toString() to it.value }.toMap())
-}
 
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
